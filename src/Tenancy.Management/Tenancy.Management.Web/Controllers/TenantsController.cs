@@ -18,14 +18,15 @@ namespace Tenancy.Management.Web.Controllers
         // GET: TenantController
         public async Task<ActionResult> Index()
         {
-            var list = await _tenantService.GetTenantsAsync();
+            //var list = await _tenantService.GetTenantsAsync();
+            var list = new List<TenantModel> { new TenantModel { Name = "Name one"}, new TenantModel { Name = "Name two"} };
             return View(list);
         }
 
         // GET: TenantController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            return View(new TenantModel {  Name = "Tenant Name"});
         }
 
         // GET: TenantController/Create
