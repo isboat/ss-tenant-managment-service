@@ -1,3 +1,9 @@
+using Tenancy.Management.Models;
+using Tenancy.Management.Mongo;
+using Tenancy.Management.Mongo.Interfaces;
+using Tenancy.Management.Services;
+using Tenancy.Management.Services.Interfaces;
+
 namespace Tenancy.Management.Web
 {
     public class Program
@@ -5,6 +11,11 @@ namespace Tenancy.Management.Web
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.Configure<MongoSettings>(
+                builder.Configuration.GetSection("MongoSettings"));
+
+            ConfigureServices(builder);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
@@ -31,6 +42,12 @@ namespace Tenancy.Management.Web
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
+        }
+
+        private static void ConfigureServices(WebApplicationBuilder builder)
+        {
+            builder.Services.AddSingleton<IRepository<TenantModel>, TenantRepository>();
+            builder.Services.AddSingleton<ITenantService, TenantService>();
         }
     }
 }
