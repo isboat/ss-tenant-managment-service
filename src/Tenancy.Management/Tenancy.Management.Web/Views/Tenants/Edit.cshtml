@@ -68,7 +68,7 @@
     </div>
     <div class="col-xl-8 order-xl-1">
         <div class="card">
-            <form asp-controller="Home" asp-action="Profile" method="POST">
+            <form asp-controller="Tenants" asp-action="Edit" method="POST">
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col-12">
@@ -85,13 +85,13 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-username">Id</label>
-                                    <input asp-for="Id" type="text" id="input-username" class="form-control" placeholder="Id" readonly="">
+                                    <input asp-for="Id" type="text" id="input-username" class="form-control" readonly="">
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-email">Name</label>
-                                    <input asp-for="Name" type="text" id="input-username" class="form-control" placeholder="name here" readonly="">
+                                    <input asp-for="Name" type="text" id="input-username" class="form-control" placeholder="name here">
                                 </div>
                             </div>
                         </div>
@@ -105,7 +105,7 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-address">Email Address</label>
-                                    <input asp-for="Email" type="email" id="input-email" class="form-control" readonly="">
+                                    <input asp-for="Email" type="email" id="input-email" class="form-control" placeholder="email@email.com">
                                 </div>
                             </div>
                         </div>
@@ -114,16 +114,17 @@
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-address">Address</label>
-                                    <input asp-for="Address" type="text" id="input-address" class="form-control" readonly="">
+                                    <input asp-for="Address" type="text" id="input-address" class="form-control" placeholder="">
                                 </div>
                             </div>
                         </div>
+
 
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-address">Telephone</label>
-                                    <input asp-for="Telephone" type="text" id="input-telephone" class="form-control" readonly="">
+                                    <input asp-for="Telephone" type="text" id="input-telephone" class="form-control" placeholder="">
                                 </div>
                             </div>
                         </div>
@@ -131,19 +132,19 @@
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-city">City</label>
-                                    <input asp-for="City" type="text" id="input-city" class="form-control" readonly="">
+                                    <input asp-for="City" type="text" id="input-city" class="form-control" placeholder="city name">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-country">Country</label>
-                                    <input asp-for="Country" type="text" id="input-country" class="form-control" readonly="">
+                                    <input asp-for="Country" type="text" id="input-country" class="form-control" placeholder="country name">
                                 </div>
                             </div>
                             <div class="col-lg-4">
                                 <div class="form-group">
                                     <label class="form-control-label" for="input-country">Post code</label>
-                                    <input asp-for="Postcode" type="text" id="input-postcode" class="form-control" readonly="">
+                                    <input asp-for="Postcode" type="text" id="input-postcode" class="form-control" placeholder="se1 2pt">
                                 </div>
                             </div>
                         </div>
@@ -154,14 +155,16 @@
                     <div class="pl-lg-4">
                         <div class="form-group">
                             <label class="form-control-label">About Me</label>
-                            <textarea asp-for="Note" rows="4" class="form-control" readonly=""></textarea>
+                            <textarea asp-for="Note" rows="4" class="form-control"></textarea>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer">
                     <div class="row align-items-center">
                         <div class="col-12 text-center">
-                            <a class="btn btn-md btn-primary" href="@Url.Action("Edit", "Tenants", new { id=Model.Id })">Edit</a>
+                            <button type="submit" class="btn btn-md btn-primary">
+                                Save
+                            </button>
                         </div>
                     </div>
                 </div>

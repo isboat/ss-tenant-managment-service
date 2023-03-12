@@ -18,15 +18,15 @@ namespace Tenancy.Management.Web.Controllers
         // GET: TenantController
         public async Task<ActionResult> Index()
         {
-            //var list = await _tenantService.GetTenantsAsync();
-            var list = new List<TenantModel> { new TenantModel { Name = "Name one"}, new TenantModel { Name = "Name two"} };
+            var list = await _tenantService.GetTenantsAsync();
             return View(list);
         }
 
         // GET: TenantController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(string id)
         {
-            return View(new TenantModel {  Name = "Tenant Name"});
+            var model = await _tenantService.GetTenantAsync(id);
+            return View(model);
         }
 
         // GET: TenantController/Create
@@ -59,18 +59,23 @@ namespace Tenancy.Management.Web.Controllers
         }
 
         // GET: TenantController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(string id)
         {
-            return View();
+            var model = await _tenantService.GetTenantAsync(id);
+            return View(model);
         }
 
         // POST: TenantController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(string id, [FromForm] TenantModel model)
         {
             try
             {
+                if (ModelState.IsValid)
+                {
+                    await _tenantService.UpdateAsync(id, model);
+                }
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -80,7 +85,7 @@ namespace Tenancy.Management.Web.Controllers
         }
 
         // GET: TenantController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult Delete(string id)
         {
             return View();
         }
@@ -88,7 +93,7 @@ namespace Tenancy.Management.Web.Controllers
         // POST: TenantController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public ActionResult Delete(string id, IFormCollection collection)
         {
             try
             {
