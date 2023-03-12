@@ -46,7 +46,8 @@ namespace Tenancy.Management.Web
 
         private static void ConfigureServices(WebApplicationBuilder builder)
         {
-            builder.Services.AddSingleton<IRepository<TenantModel>, TenantRepository>();
+            builder.Services.AddSingleton<ITenantDBRepository<TenantModel>, TenantAdminRepository>();
+            builder.Services.AddSingleton<IRepository<UserModel>, UserRepository>();
             builder.Services.AddSingleton<ITenantService, TenantService>();
         }
     }

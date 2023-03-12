@@ -44,7 +44,7 @@ namespace Tenancy.Management.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    model.Id = Guid.NewGuid().ToString("N");
+                    //model.Id = Guid.NewGuid().ToString("N");
                     model.Created = DateTime.Now;
 
                     await _tenantService.CreateAsync(model);
