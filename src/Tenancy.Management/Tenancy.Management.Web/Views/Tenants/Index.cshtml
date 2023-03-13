@@ -1,5 +1,5 @@
 ﻿@using Tenancy.Management.Models;
-@model IEnumerable<TenantModel>
+@model TenantListViewModel
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -17,7 +17,7 @@
                 <table class="table align-items-center table-flush">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col" class="sort" data-sort="name">Project</th>
+                            <th scope="col" class="sort" data-sort="name">Company</th>
                             <th scope="col" class="sort" data-sort="budget">Created</th>
                             <th scope="col" class="sort" data-sort="status">Status</th>
                             <th scope="col">Users</th>
@@ -26,10 +26,12 @@
                         </tr>
                     </thead>
                     <tbody class="list">
-                        @foreach (var item in Model)
+                        @foreach (var tenantViewModel in Model.Tenants)
                         {
-                        <tr>
-                            <th scope="row">
+                            var item = tenantViewModel.Tenant;
+
+                            <tr>
+                                <th scope="row">
                                 <div class="media align-items-center">
                                     <a href="#" class="avatar rounded-circle mr-3">
                                         <img alt="Image placeholder" src="~/img/theme/bootstrap.jpg">
@@ -40,7 +42,7 @@
                                 </div>
                             </th>
                             <td class="budget">
-                                @item.Created.ToLongDateString();
+                                @item.Created.ToLongDateString()
                             </td>
                             <td>
                                 <span class="badge badge-dot mr-4">
@@ -50,18 +52,15 @@
                             </td>
                             <td>
                                 <div class="avatar-group">
-                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Ryan Tompson">
-                                        <img alt="Image placeholder" src="~/img/theme/team-1.jpg">
-                                    </a>
-                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Romina Hadid">
-                                        <img alt="Image placeholder" src="~/img/theme/team-2.jpg">
-                                    </a>
-                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Alexander Smith">
-                                        <img alt="Image placeholder" src="~/img/theme/team-3.jpg">
-                                    </a>
-                                    <a href="#" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="Jessica Doe">
-                                        <img alt="Image placeholder" src="~/img/theme/team-4.jpg">
-                                    </a>
+                                    @{var index = 1; }
+                                    @foreach (var user in tenantViewModel.Users)
+                                    {
+                                            <a href="@Url.Action("Details", "Users", new { id=user.Id, tenantId=user.TenantId})" class="avatar avatar-sm rounded-circle" data-toggle="tooltip" data-original-title="@user.Name">
+                                            <img alt="Image placeholder" src="~/img/theme/team-@(index).jpg">
+                                            </a>
+
+                                            index++;
+                                        }
                                 </div>
                             </td>
                             <td>
