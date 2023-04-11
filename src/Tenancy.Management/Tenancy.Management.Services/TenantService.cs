@@ -6,9 +6,9 @@ namespace Tenancy.Management.Services
 {
     public class TenantService : ITenantService
     {
-        private IRepository<TenantModel> _repository;
+        private ITenantDBRepository<TenantModel> _repository;
 
-        public TenantService(IRepository<TenantModel> repository)
+        public TenantService(ITenantDBRepository<TenantModel> repository)
         {
             _repository = repository;
         }
@@ -25,7 +25,29 @@ namespace Tenancy.Management.Services
 
         public async Task CreateAsync(TenantModel newModel)
         {
-            await _repository.CreateAsync(newModel);
+            if (newModel != null)
+            {
+                newModel.Id = GenerateId(newModel.Name);
+                if (string.IsNullOrEmpty(newModel.Id))
+                {
+                    throw new ArgumentNullException(nameof(newModel.Id));
+                }
+
+                await _repository.CreateAsync(newModel);
+                _repository.CreateDB(newModel.Id);
+            }
+        }
+
+        private string? GenerateId(string? name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new ArgumentNullException(nameof(name));
+            }
+
+            var id = name.Replace(" ", "_").ToLowerInvariant();
+            id += "_tenant";
+            return id;
         }
 
         public async Task UpdateAsync(string id, TenantModel updatedModel)

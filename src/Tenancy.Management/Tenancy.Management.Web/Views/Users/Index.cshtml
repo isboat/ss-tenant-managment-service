@@ -14,6 +14,7 @@
                     <thead class="thead-light">
                         <tr>
                             <th scope="col" class="sort" data-sort="name">Name</th>
+                            <th scope="col" class="sort" data-sort="budget">Role</th>
                             <th scope="col" class="sort" data-sort="budget">Created</th>
                             <th scope="col"></th>
                         </tr>
@@ -32,6 +33,9 @@
                                         </div>
                                     </div>
                                 </th>
+                                <td class="budget">
+                                    @item.Role.ToString()
+                                </td>
                                 <td class="budget">
                                     @item.Created.ToLongDateString()
                                 </td>

@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  tenancy.management.web:
+    image: ${DOCKER_REGISTRY-}tenancymanagementweb
+    build:
+      context: .
+      dockerfile: Tenancy.Management.Web/Dockerfile
+    depends_on:
+    - mongo
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+    - "27017:27017"
+    volumes:
+          - C:\DockerMongoDb\data:/data/db

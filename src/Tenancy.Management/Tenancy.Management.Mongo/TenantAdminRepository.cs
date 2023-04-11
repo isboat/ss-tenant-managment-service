@@ -5,16 +5,17 @@ using Tenancy.Management.Mongo.Interfaces;
 
 namespace Tenancy.Management.Mongo
 {
-    public class TenantRepository: IRepository<TenantModel>
+    public class TenantAdminRepository: ITenantDBRepository<TenantModel>
     {
         private readonly IMongoCollection<TenantModel> _collection;
+        private readonly MongoClient _client;
 
-        public TenantRepository(IOptions<MongoSettings> settings)
+        public TenantAdminRepository(IOptions<MongoSettings> settings)
         {
-            var mongoClient = new MongoClient(
+            _client = new MongoClient(
             settings.Value.ConnectionString);
 
-            var mongoDatabase = mongoClient.GetDatabase(
+            var mongoDatabase = _client.GetDatabase(
                 settings.Value.DatabaseName);
 
             _collection = mongoDatabase.GetCollection<TenantModel>(
@@ -36,5 +37,10 @@ namespace Tenancy.Management.Mongo
         public async Task RemoveAsync(string id) =>
             await _collection.DeleteOneAsync(x => x.Id == id);
 
+        public void CreateDB(string dbName)
+        {
+            var db = _client.GetDatabase(dbName);
+            db.CreateCollection("TenantInfo");
+        }
     }
 }

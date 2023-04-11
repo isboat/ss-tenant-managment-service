@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tenancy.Management.Web", "Tenancy.Management.Web\Tenancy.Management.Web.csproj", "{C97F4F55-209F-4C5B-BA7F-E028BF8F4CFF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenancy.Management.Web", "Tenancy.Management.Web\Tenancy.Management.Web.csproj", "{C97F4F55-209F-4C5B-BA7F-E028BF8F4CFF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tenancy.Management.Models", "Tenancy.Management.Models\Tenancy.Management.Models.csproj", "{4744F3C7-F026-4570-8054-76353A37C3D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenancy.Management.Models", "Tenancy.Management.Models\Tenancy.Management.Models.csproj", "{4744F3C7-F026-4570-8054-76353A37C3D2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tenancy.Management.Services", "Tenancy.Management.Services\Tenancy.Management.Services.csproj", "{F461F426-5C99-4D35-B565-F0C135E3DCF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenancy.Management.Services", "Tenancy.Management.Services\Tenancy.Management.Services.csproj", "{F461F426-5C99-4D35-B565-F0C135E3DCF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tenancy.Management.Mongo", "Tenancy.Management.Mongo\Tenancy.Management.Mongo.csproj", "{B7340BC8-0690-4F7A-B249-1C90DF6367E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenancy.Management.Mongo", "Tenancy.Management.Mongo\Tenancy.Management.Mongo.csproj", "{B7340BC8-0690-4F7A-B249-1C90DF6367E4}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{ACB0472D-CF17-4DFF-9C94-61BD4E82F1B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{B7340BC8-0690-4F7A-B249-1C90DF6367E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7340BC8-0690-4F7A-B249-1C90DF6367E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7340BC8-0690-4F7A-B249-1C90DF6367E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACB0472D-CF17-4DFF-9C94-61BD4E82F1B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACB0472D-CF17-4DFF-9C94-61BD4E82F1B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACB0472D-CF17-4DFF-9C94-61BD4E82F1B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACB0472D-CF17-4DFF-9C94-61BD4E82F1B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
