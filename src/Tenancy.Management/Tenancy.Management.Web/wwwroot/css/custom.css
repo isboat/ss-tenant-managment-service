@@ -1,0 +1,76 @@
+﻿[data-initials-blue]:before {
+    background: #099bdd;
+    color: white;
+    opacity: 1;
+    content: attr(data-initials-blue);
+    display: inline-block;
+    font-weight: bold;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+[data-initials-orange]:before {
+    background: orange;
+    color: white;
+    opacity: 1;
+    content: attr(data-initials-orange);
+    display: inline-block;
+    font-weight: bold;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+[data-initials-pink]:before {
+    background: pink;
+    color: white;
+    opacity: 1;
+    content: attr(data-initials-pink);
+    display: inline-block;
+    font-weight: bold;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+
+[data-initials-brown]:before {
+    background: brown;
+    color: white;
+    opacity: 1;
+    content: attr(data-initials-brown);
+    display: inline-block;
+    font-weight: bold;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+[data-initials-green]:before {
+    background: green;
+    color: white;
+    opacity: 1;
+    content: attr(data-initials-green);
+    display: inline-block;
+    font-weight: bold;
+    border-radius: 50%;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}

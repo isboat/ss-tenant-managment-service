@@ -28,6 +28,10 @@ namespace Tenancy.Management.Models
 
         public string? Note { get; set; }
 
+        public int TvAppsLimit { get; set; } = 3;
+
+        public int UsersLimit { get; set; } = 5;
+
         public DateTime Created { get; set; }
     }
 }
