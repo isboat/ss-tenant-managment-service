@@ -37,7 +37,10 @@
                                     @item.Role.ToString()
                                 </td>
                                 <td class="budget">
-                                    @item.Created.ToLongDateString()
+                                    @if(item.CreatedOn.HasValue)
+                                    {
+                                        item.CreatedOn.Value.ToLongDateString();                                        
+                                    }
                                 </td>
                                 <td class="text-right">
                                     <div class="dropdown">
@@ -47,7 +50,7 @@
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                             <a class="dropdown-item" href="@Url.Action("Details", "Users", new { id=item.Id, tenantId=item.TenantId })">View Details</a>
                                             <a class="dropdown-item" href="@Url.Action("Edit", "Users", new { id=item.Id, tenantId=item.TenantId })">Edit</a>
-                                            <a class="dropdown-item" href="@Url.Action("Delete", "Users", new { id=item.Id, tenantId=item.TenantId })">Delete Tenant</a>
+                                            <a class="dropdown-item" href="@Url.Action("Delete", "Users", new { id=item.Id, tenantId=item.TenantId })">Delete User</a>
                                         </div>
                                     </div>
                                 </td>

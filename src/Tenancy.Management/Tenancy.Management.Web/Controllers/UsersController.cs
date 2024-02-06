@@ -45,7 +45,7 @@ namespace Tenancy.Management.Web.Controllers
                 if (ModelState.IsValid)
                 {
                     model.Id = Guid.NewGuid().ToString("N");
-                    model.Created = DateTime.Now;
+                    model.CreatedOn = DateTime.UtcNow;
 
                     await _userService.CreateAsync(model);
                 }
@@ -83,24 +83,17 @@ namespace Tenancy.Management.Web.Controllers
             }
         }
 
-        // GET: TenantController/Delete/5
-        public ActionResult Delete(string id)
-        {
-            return View();
-        }
-
-        // POST: TenantController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(string id, IFormCollection collection)
+        [HttpGet("{tenantId}/Users/Delete/{id}")]
+        public async Task<ActionResult> Delete(string tenantId, string id)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                await _userService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index), new { tenantId });
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index), new { tenantId });
             }
         }
     }

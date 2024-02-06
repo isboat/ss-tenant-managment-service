@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net" Version="0.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Tenancy.Management.Models\Tenancy.Management.Models.csproj" />
     <ProjectReference Include="..\Tenancy.Management.Mongo\Tenancy.Management.Mongo.csproj" />
   </ItemGroup>

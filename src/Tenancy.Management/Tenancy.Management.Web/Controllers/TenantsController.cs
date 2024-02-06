@@ -107,24 +107,17 @@ namespace Tenancy.Management.Web.Controllers
             }
         }
 
-        // GET: TenantController/Delete/5
-        public ActionResult Delete(string id)
-        {
-            return View();
-        }
-
-        // POST: TenantController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(string id, IFormCollection collection)
+        [HttpGet("/Tenants/Delete/{id}")]
+        public async Task<ActionResult> Delete(string id)
         {
             try
             {
+                //await _tenantService.RemoveAsync(id);
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
     }
