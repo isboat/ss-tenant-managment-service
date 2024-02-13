@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System.Linq.Expressions;
 using Tenancy.Management.Models;
 using Tenancy.Management.Mongo.Interfaces;
 
@@ -41,6 +42,11 @@ namespace Tenancy.Management.Mongo
         {
             var db = _client.GetDatabase(dbName);
             db.CreateCollection("TenantInfo");
+        }
+
+        public Task<IEnumerable<TenantModel>> GetByFilterAsync(Expression<Func<DeviceAuthModel, bool>> filter)
+        {
+            throw new NotImplementedException();
         }
     }
 }

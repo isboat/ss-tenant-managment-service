@@ -29,7 +29,15 @@ namespace Tenancy.Management.Services
             var model = await _repository.GetAsync(id);
             if(model != null) model.Password = null;
 
-            return model!;  
+            return model!;
+        }
+
+        public async Task<UserModel> GetByEmailAsync(string email)
+        {
+            var model = await _repository.GetByEmailAsync(email);
+            if (model != null) model.Password = null;
+
+            return model!;
         }
 
         public async Task CreateAsync(UserModel newModel)

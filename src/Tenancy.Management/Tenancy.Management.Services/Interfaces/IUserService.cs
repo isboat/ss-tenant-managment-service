@@ -8,6 +8,8 @@ namespace Tenancy.Management.Services.Interfaces
 
         Task<UserModel> GetAsync(string id);
 
+        Task<UserModel> GetByEmailAsync(string email);
+
         public Task CreateAsync(UserModel newModel);
 
         public Task UpdateAsync(string id, UserModel updatedModel);

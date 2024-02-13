@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using Tenancy.Management.Models;
 
 namespace Tenancy.Management.Mongo.Interfaces
 {
     public interface IRepository<T>
     {
         public Task<List<T>> GetAsync();
+
+        public Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<DeviceAuthModel, bool>> filter);
 
         public Task<T?> GetAsync(string id);
 

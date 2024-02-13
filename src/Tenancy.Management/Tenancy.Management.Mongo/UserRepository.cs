@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System.Linq.Expressions;
 using Tenancy.Management.Models;
 using Tenancy.Management.Mongo.Interfaces;
 
@@ -29,6 +30,11 @@ namespace Tenancy.Management.Mongo
         public async Task<UserModel?> GetAsync(string id) =>
             await _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
+        public async Task<UserModel?> GetByEmailAsync(string email)
+        {
+            return await _collection.Find(x => x.Email == email).FirstOrDefaultAsync();
+        }
+
         public async Task CreateAsync(UserModel newTenant) =>
             await _collection.InsertOneAsync(newTenant);
 
@@ -37,5 +43,10 @@ namespace Tenancy.Management.Mongo
 
         public async Task RemoveAsync(string id) =>
             await _collection.DeleteOneAsync(x => x.Id == id);
+
+        public Task<IEnumerable<UserModel>> GetByFilterAsync(Expression<Func<DeviceAuthModel, bool>> filter)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

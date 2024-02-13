@@ -47,6 +47,12 @@ namespace Tenancy.Management.Web.Controllers
                     model.Id = Guid.NewGuid().ToString("N");
                     model.CreatedOn = DateTime.UtcNow;
 
+                    var existingUser = _userService.GetByEmailAsync(model.Email!);
+                    if (existingUser != null)
+                    {
+                        return RedirectToAction(nameof(Create), new { tenantId });
+                    }
+
                     await _userService.CreateAsync(model);
                 }
 

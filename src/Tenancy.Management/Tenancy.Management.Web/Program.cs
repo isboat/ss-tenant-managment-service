@@ -50,6 +50,10 @@ namespace Tenancy.Management.Web
             builder.Services.AddSingleton<IUserRepository, UserRepository>();
             builder.Services.AddSingleton<ITenantService, TenantService>();
             builder.Services.AddSingleton<IUserService, UserService>();
+
+
+            builder.Services.AddSingleton<IRepository<DeviceAuthModel>, DeviceRepository>();
+            builder.Services.AddSingleton<IService<DeviceAuthModel>, BaseService<DeviceAuthModel>>();
         }
     }
 }

@@ -1,0 +1,41 @@
+﻿@using Tenancy.Management.Models;
+@model IEnumerable<DeviceAuthModel>
+
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <!-- Card header -->
+            <div class="card-header border-0">
+                <h3 class="mb-0">List of UnApproved Device Authentications</h3>
+            </div>
+            <!-- Light table -->
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Company</th>
+                        </tr>
+                    </thead>
+                    <tbody class="list">
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div>TenantId: @item.TenantId</div>
+                                    <div>ApprovedDatetime: @item.ApprovedDatetime</div>
+                                    <div>RegisteredDatetime: @item.RegisteredDatetime</div>
+                                    <div>UserCode: @item.UserCode</div>
+                                    <div>ExpiresIn: @item.ExpiresIn</div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <a class="dropdown-item" href="@Url.Action("Delete", "DeviceAuth")">Delete All</a>
+            </div>
+        </div>
+    </div>
+</div>
