@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Tenancy.Management.Models;
+using Tenancy.Management.Services;
 using Tenancy.Management.Services.Interfaces;
 using Tenancy.Management.Web.Models;
 
@@ -11,11 +12,22 @@ namespace Tenancy.Management.Web.Controllers
     {
         private readonly ITenantService _tenantService;
         private readonly IUserService _userService;
+        private readonly ITenantModelService<AssetModel> _assetService;
+        private readonly ITenantModelService<MenuModel> _menuService;
+        private readonly ITenantModelService<TextAssetItemModel> _textAssetService;
 
-        public TenantsController(ITenantService tenantService, IUserService userService)
+        public TenantsController(
+            ITenantService tenantService,
+            IUserService userService,
+            ITenantModelService<AssetModel> assetService,
+            ITenantModelService<MenuModel> menuService,
+            ITenantModelService<TextAssetItemModel> textAssetService)
         {
             _tenantService = tenantService;
             _userService = userService;
+            _assetService = assetService;
+            _menuService = menuService;
+            _textAssetService = textAssetService;
         }
 
         // GET: TenantController
@@ -39,15 +51,20 @@ namespace Tenancy.Management.Web.Controllers
             return View(model);
         }
 
-        // GET: TenantController/Details/5
         public async Task<ActionResult> Details(string id)
         {
             var tenant = await _tenantService.GetTenantAsync(id);
             var users = await _userService.GetUsersAsync(tenant.Id!);
+            var assets = await _assetService.GetAllAsync(tenant.Id!);
+            var menus = await _menuService.GetAllAsync(tenant.Id!);
+            var textAds = await _textAssetService.GetAllAsync(tenant.Id!);
 
             var model = new TenantViewModel();
             if (tenant != null) model.Tenant = tenant;
             if (users != null) model.Users = users;
+            if (assets != null) model.Assets = assets;
+            if (assets != null) model.Menus = menus;
+            if (textAds != null) model.TextAssets = textAds;
 
             return View(model);
         }

@@ -1,0 +1,91 @@
+﻿@model IEnumerable<Tenancy.Management.Models.Signalr.SignalrConnectionModel>
+
+<p>
+    <h2>Live apps</h2>
+</p>
+
+<div class="row">
+    <div class="col">
+        <div class="card">
+            <!-- Card header -->
+            <div class="card-header border-0">
+                <h3 class="mb-0">List of Tenants</h3>
+            </div>
+            <!-- Light table -->
+            <div class="table-responsive">
+                <table class="table align-items-center table-flush">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col" class="sort" data-sort="name">Connection Time</th>
+                            <th scope="col" class="sort" data-sort="budget">Device Name</th>
+                            <th scope="col" class="sort" data-sort="status">Device Id</th>
+                            <th scope="col">Connection Id</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="list">
+                        @foreach (var item in Model)
+                        {
+                            var time = item.ConnectionDateTime.HasValue ? @item.ConnectionDateTime.Value.ToString("dd/MMM/yyyy hh:mm:ss") : "";
+                            <tr>
+                                <td class="budget">
+                                    @time
+                                </td>
+                                <td>
+                                    @item.DeviceName
+                                </td>
+                                <td>
+                                    @item.DeviceId
+                                </td>
+                                <td>
+                                        @item.Id
+                                </td>
+                                <td class="text-right">
+                                    <div class="dropdown">
+                                        <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
+                                            <a class="dropdown-item appMessage" href="@Url.Action("OperatorInfo", "TvApps", new { id=item.Id, tenantId = item.TenantId })">Send Message To App</a>
+                                            <a class="dropdown-item appAction" href="@Url.Action("RestartApp", "TvApps", new { id=item.Id, tenantId = item.TenantId })">Restart App</a>
+                                            <a class="dropdown-item appAction" href="@Url.Action("ForceAppUpgrade", "TvApps", new { id=item.Id, tenantId = item.TenantId })">Upgrade App</a>
+                                            <a class="dropdown-item appAction" href="@Url.Action("Terminate", "TvApps", new { id=item.Id, tenantId = item.TenantId })">Terminate App</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <!-- Card footer -->
+            <div class="card-footer py-4">
+                <nav aria-label="...">
+                    <ul class="pagination justify-content-end mb-0">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">
+                                <i class="fas fa-angle-left"></i>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                        </li>
+                        <li class="page-item active">
+                            <a class="page-link" href="#">1</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">3</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">
+                                <i class="fas fa-angle-right"></i>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>

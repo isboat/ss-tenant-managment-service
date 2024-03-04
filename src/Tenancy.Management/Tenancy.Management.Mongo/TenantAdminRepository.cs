@@ -44,7 +44,7 @@ namespace Tenancy.Management.Mongo
             db.CreateCollection("TenantInfo");
         }
 
-        public Task<IEnumerable<TenantModel>> GetByFilterAsync(Expression<Func<DeviceAuthModel, bool>> filter)
+        public Task<IEnumerable<TenantModel>> GetByFilterAsync(Expression<Func<TenantModel, bool>> filter)
         {
             throw new NotImplementedException();
         }

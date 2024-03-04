@@ -7,6 +7,9 @@
 @{
     Layout = "_LayoutProfile";
     ViewData["UserCount"] = Model.UserCount;
+    ViewData["AssetCount"] = Model.AssetCount;
+    ViewData["MenuCount"] = Model.Menus.Count();
+    ViewData["TextAdsCount"] = Model.TextAssets.Count();
 }
 
 <div class="row">

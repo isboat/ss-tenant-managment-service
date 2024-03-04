@@ -19,7 +19,7 @@ namespace Tenancy.Management.Services
             return await _repository.GetAsync();
         }
 
-        public async Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<DeviceAuthModel, bool>> filter)
+        public async Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<T, bool>> filter)
         {
             return await _repository.GetByFilterAsync(filter);
         }
