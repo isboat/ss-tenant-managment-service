@@ -15,19 +15,22 @@ namespace Tenancy.Management.Web.Controllers
         private readonly ITenantModelService<AssetModel> _assetService;
         private readonly ITenantModelService<MenuModel> _menuService;
         private readonly ITenantModelService<TextAssetItemModel> _textAssetService;
+        private readonly IEmailSender _emailSender;
 
         public TenantsController(
             ITenantService tenantService,
             IUserService userService,
             ITenantModelService<AssetModel> assetService,
             ITenantModelService<MenuModel> menuService,
-            ITenantModelService<TextAssetItemModel> textAssetService)
+            ITenantModelService<TextAssetItemModel> textAssetService,
+            IEmailSender emailSender)
         {
             _tenantService = tenantService;
             _userService = userService;
             _assetService = assetService;
             _menuService = menuService;
             _textAssetService = textAssetService;
+            _emailSender = emailSender;
         }
 
         // GET: TenantController
@@ -88,6 +91,8 @@ namespace Tenancy.Management.Web.Controllers
                     model.Created = DateTime.Now;
 
                     await _tenantService.CreateAsync(model);
+
+                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync account created", GetTenantCreatedEmailBody(model));
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -96,6 +101,11 @@ namespace Tenancy.Management.Web.Controllers
             {
                 return View();
             }
+        }
+
+        private string GetTenantCreatedEmailBody(TenantModel model)
+        {
+            return $"Hi {model.Name}, onScreenSync Management service is created for you and ready for use, please visit the management service at <a href='https://www.onscreensync.com/'>Login</a>";
         }
 
         // GET: TenantController/Edit/5

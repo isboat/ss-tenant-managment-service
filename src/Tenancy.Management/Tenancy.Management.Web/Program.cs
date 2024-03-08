@@ -19,6 +19,9 @@ namespace Tenancy.Management.Web
             builder.Services.Configure<MongoSettings>(
                 builder.Configuration.GetSection("MongoSettings"));
 
+            builder.Services.Configure<EmailSettings>(
+                builder.Configuration.GetSection("EmailSettings"));
+
             ConfigureServices(builder);
 
             // Add services to the container.
@@ -54,6 +57,7 @@ namespace Tenancy.Management.Web
             builder.Services.AddSingleton<IUserRepository, UserRepository>();
             builder.Services.AddSingleton<ITenantService, TenantService>();
             builder.Services.AddSingleton<IUserService, UserService>();
+            builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 
             builder.Services.AddSingleton<ITenantRepository<AssetModel>>(provider =>
