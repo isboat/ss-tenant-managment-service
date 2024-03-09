@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using Tenancy.Management.Models;
 using Tenancy.Management.Services.Interfaces;
+using Tenancy.Management.Web.Models;
 
 namespace Tenancy.Management.Web.Controllers
 {
@@ -19,7 +20,12 @@ namespace Tenancy.Management.Web.Controllers
         public async Task<ActionResult> Index(string tenantId)
         {
             var list = await _userService.GetUsersAsync(tenantId);
-            return View(list);
+            var model = new UserListViewModel
+            {
+                Users = list ?? new List<UserModel>(),
+                TenantId = tenantId
+            };
+            return View(model);
         }
 
         [HttpGet("{tenantId}/Users/Details/{id}")]
@@ -47,7 +53,7 @@ namespace Tenancy.Management.Web.Controllers
                     model.Id = Guid.NewGuid().ToString("N");
                     model.CreatedOn = DateTime.UtcNow;
 
-                    var existingUser = _userService.GetByEmailAsync(model.Email!);
+                    var existingUser = await _userService.GetByEmailAsync(model.Email!);
                     if (existingUser != null)
                     {
                         return RedirectToAction(nameof(Create), new { tenantId });

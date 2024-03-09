@@ -1,5 +1,5 @@
 ﻿@using Tenancy.Management.Models;
-@model IEnumerable<UserModel>
+@model UserListViewModel
 
 <div class="row">
     <div class="col">
@@ -7,6 +7,10 @@
             <!-- Card header -->
             <div class="card-header border-0">
                 <h3 class="mb-0">List of Users</h3>
+                <p>
+                    <br />
+                    <a href="/@(Model.TenantId)/users/create" class="btn btn-sm btn-default">Add user</a>
+                </p>
             </div>
             <!-- Light table -->
             <div class="table-responsive">
@@ -20,7 +24,7 @@
                         </tr>
                     </thead>
                     <tbody class="list">
-                        @foreach (var item in Model)
+                        @foreach (var item in Model.Users)
                         {
                             <tr>
                                 <th scope="row">
