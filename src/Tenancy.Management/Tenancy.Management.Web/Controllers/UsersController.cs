@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Text;
 using Tenancy.Management.Models;
 using Tenancy.Management.Services.Interfaces;
 using Tenancy.Management.Web.Models;
@@ -10,10 +11,12 @@ namespace Tenancy.Management.Web.Controllers
     public class UsersController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IEmailSender _emailSender;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IEmailSender emailSender)
         {
             _userService = userService;
+            _emailSender = emailSender;
         }
 
         [HttpGet("{tenantId}/Users")]
@@ -60,6 +63,7 @@ namespace Tenancy.Management.Web.Controllers
                     }
 
                     await _userService.CreateAsync(model);
+                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync user created", GetUserCreatedEmailbody(model));
                 }
 
                 return RedirectToAction(nameof(Index), new { tenantId = tenantId});
@@ -68,6 +72,19 @@ namespace Tenancy.Management.Web.Controllers
             {
                 return View();
             }
+        }
+
+        private static string GetUserCreatedEmailbody(UserModel model)
+        {
+            var builder = new StringBuilder();
+            builder.Append($"<p>Dear {model.Name},</p>");
+            builder.Append($"<p>Welcome to onScreenSync TV Screen Management service! Welcome onboard as a content editor</p>");
+            builder.Append("<ul>");
+            builder.Append($"<li>Take some time to navigate through our platform and discover all the tools and features we offer to help you. Visit <a href='http://myscreensyncservice.runasp.net/'>Management Dashboard</a> to get started</li>");
+            builder.Append("</ul>");
+            builder.Append("<p>If you have any questions or need assistance, don't hesitate to reach out to our support team at support@onscreensync.com or visit our Help Center for <a href='https://onscreensync.com/faq.html'>FAQs and troubleshooting guides</a>.</p>");
+            builder.Append("<p>Best regards,<br />onScreenSync.com<p/>");
+            return builder.ToString();
         }
 
         [HttpGet("{tenantId}/Users/Edit/{id}")]
