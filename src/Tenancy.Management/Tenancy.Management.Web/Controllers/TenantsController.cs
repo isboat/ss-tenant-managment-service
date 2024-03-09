@@ -93,7 +93,7 @@ namespace Tenancy.Management.Web.Controllers
 
                     await _tenantService.CreateAsync(model);
 
-                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync account created", GetTenantCreatedEmailBody(model));
+                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync platform created", GetTenantCreatedEmailBody(model));
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -108,10 +108,10 @@ namespace Tenancy.Management.Web.Controllers
         {
             var builder = new StringBuilder();
             builder.Append($"<p>Dear {model.Name},</p>");
-            builder.Append($"<p>Welcome to onScreenSync TV Screen Management service! We're thrilled to have you on board and we're excited to see what you'll accomplish with our platform. Here are a few things you can do now that you're part of our community:</p>");
+            builder.Append($"<p>Welcome to onScreenSync TV Screen Management service! Your platform is now created and opened for use. We're thrilled to have you on board and we're excited to see what you'll accomplish with our platform. Here are a few things you can do now that you're part of our community:</p>");
             builder.Append("<ul>");
-            builder.Append($"<li>Explore Our Features: Take some time to navigate through our platform and discover all the tools and features we offer to help you. Visit <a href='http://myscreensyncservice.runasp.net/'>Management Dashboard</a></li>");
-            builder.Append("<li>Add users as content editors: From the management dashboard, you can add users who can add and updated engaging content for your audience.</li>");
+            builder.Append($"<li><strong>Explore Our Features</strong>: Take some time to navigate through our platform and discover all the tools and features we offer to help you. Visit <a href='http://myscreensyncservice.runasp.net/'>Management Dashboard to get started.</a></li>");
+            builder.Append("<li><strong>Add users as content editors</strong>: From the management dashboard, you can add users who can add and updated engaging content for your audience.</li>");
             builder.Append("</ul>");
             builder.Append("<p>If you have any questions or need assistance, don't hesitate to reach out to our support team at support@onscreensync.com or visit our Help Center for <a href='https://onscreensync.com/faq.html'>FAQs and troubleshooting guides</a>.</p>");
             builder.Append("<p>Once again, welcome to onScreenSync TV Screen Management service! We're committed to providing you with a seamless and rewarding experience, and we look forward to helping you achieve your goals.</p>");

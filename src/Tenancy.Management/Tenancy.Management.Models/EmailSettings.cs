@@ -8,7 +8,7 @@ namespace Tenancy.Management.Models
 {
     public class EmailSettings
     {
-        public string Host { get; set; }
+        public string? Host { get; set; }
         public int Port { get; set; }
         public string? FromAddress { get; set; }
 
