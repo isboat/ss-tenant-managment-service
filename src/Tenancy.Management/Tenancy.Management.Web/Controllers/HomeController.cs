@@ -49,7 +49,7 @@ namespace Tenancy.Management.Web.Controllers
                 return View();
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();

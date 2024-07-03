@@ -18,14 +18,12 @@
         <a href="@Url.Action("Profile")" class="dropdown-item">
             <i class="ni ni-support-16"></i>
             <span>Support</span>
-        </a>
-        <div class="dropdown-divider"></div>
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new {area = ""})">
-            <button type="submit" class="dropdown-item logout">
-                <i class="ni ni-user-run"></i>
-                <span class="logout">Logout</span>
-            </button>
-        </form>
+    </a>
+    <div class="dropdown-divider"></div>
+    <a href="/Home/Logout" class="dropdown-item">
+        <i class="ni ni-support-16"></i>
+        <span>Logout</span>
+    </a>
  
         <!--
         <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Login">
