@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using Tenancy.Management.Models.Signalr;
 using Tenancy.Management.Services.Interfaces;
@@ -6,6 +7,7 @@ using Tenancy.Management.Web.Services;
 
 namespace Tenancy.Management.Web.Controllers
 {
+    [Authorize]
     public class TvAppsController : Controller
     {
         private readonly ISignalrService _signalrService;

@@ -1,5 +1,9 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Azure.SignalR.Management;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using Tenancy.Management.Models;
 using Tenancy.Management.Models.Signalr;
 using Tenancy.Management.Mongo;
@@ -22,10 +26,13 @@ namespace Tenancy.Management.Web
             builder.Services.Configure<EmailSettings>(
                 builder.Configuration.GetSection("EmailSettings"));
 
+
             ConfigureServices(builder);
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            RegisterAuth(builder, builder.Configuration);
 
             var app = builder.Build();
 
@@ -41,7 +48,7 @@ namespace Tenancy.Management.Web
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
@@ -96,6 +103,46 @@ namespace Tenancy.Management.Web
             builder.Services.AddSingleton<ITenantModelService<TextAssetItemModel>, TenantModelService<TextAssetItemModel>>();
             builder.Services.AddSingleton<ITenantModelService<MenuModel>, TenantModelService<MenuModel>>();
             builder.Services.AddSingleton<ITenantModelService<SignalrConnectionModel>, TenantModelService<SignalrConnectionModel>>();
+        }
+
+        private static void RegisterAuth(WebApplicationBuilder builder, ConfigurationManager configuration)
+        {
+            builder.Services.AddAuthorization(options =>
+            {
+                options.AddPolicy(TenantAuthorization.RequiredPolicy, policy =>
+                    policy.RequireAuthenticatedUser().RequireClaim("scope", TenantAuthorization.RequiredScope));
+            });
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = "/Home/Login";
+                    options.Cookie.Name = "onScreenSync.Tenancy.AspNetCore.Cookies";
+                    options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                    options.SlidingExpiration = true;
+
+                });
+                    //.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+
+                //{
+                //    options.SaveToken = true;
+                //    options.TokenValidationParameters = new()
+                //    {
+                //        RequireExpirationTime = true,
+                //        RequireSignedTokens = true,
+                //        ValidateAudience = true,
+                //        ValidateIssuer = true,
+                //        ValidateLifetime = true,
+
+                //        // Allow for some drift in server time
+                //        // (a lower value is better; we recommend two minutes or less)
+                //        ClockSkew = TimeSpan.FromSeconds(0),
+
+                //        ValidIssuer = settings.Issuer,
+                //        ValidAudience = settings.Audience,
+                //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.SigningKey!))
+                //    };
+                //});
         }
     }
 }

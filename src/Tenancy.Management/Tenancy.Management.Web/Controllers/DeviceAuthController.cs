@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using Tenancy.Management.Models;
@@ -8,6 +9,7 @@ using Tenancy.Management.Web.Models;
 
 namespace Tenancy.Management.Web.Controllers
 {
+    [Authorize]
     public class DeviceAuthController : Controller
     {
         private readonly IService<DeviceAuthModel> _baseService;
