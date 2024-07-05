@@ -26,6 +26,9 @@ namespace Tenancy.Management.Web
             builder.Services.Configure<EmailSettings>(
                 builder.Configuration.GetSection("EmailSettings"));
 
+            builder.Services.Configure<AuthSettings>(
+                builder.Configuration.GetSection("AuthSettings"));
+
 
             ConfigureServices(builder);
 
