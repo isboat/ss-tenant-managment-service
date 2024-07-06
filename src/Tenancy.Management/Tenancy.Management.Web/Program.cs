@@ -65,9 +65,12 @@ namespace Tenancy.Management.Web
         {
             builder.Services.AddSingleton<ITenantDBRepository<TenantModel>, TenantAdminRepository>();
             builder.Services.AddSingleton<IUserRepository, UserRepository>();
+            builder.Services.AddSingleton<IRepository<RegisterModel>, RegistrationRepository>();
+
             builder.Services.AddSingleton<ITenantService, TenantService>();
             builder.Services.AddSingleton<IUserService, UserService>();
             builder.Services.AddSingleton<IEmailSender, EmailSender>();
+            builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
 
 
             builder.Services.AddSingleton<ITenantRepository<AssetModel>>(provider =>
@@ -125,27 +128,6 @@ namespace Tenancy.Management.Web
                     options.SlidingExpiration = true;
 
                 });
-                    //.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-
-                //{
-                //    options.SaveToken = true;
-                //    options.TokenValidationParameters = new()
-                //    {
-                //        RequireExpirationTime = true,
-                //        RequireSignedTokens = true,
-                //        ValidateAudience = true,
-                //        ValidateIssuer = true,
-                //        ValidateLifetime = true,
-
-                //        // Allow for some drift in server time
-                //        // (a lower value is better; we recommend two minutes or less)
-                //        ClockSkew = TimeSpan.FromSeconds(0),
-
-                //        ValidIssuer = settings.Issuer,
-                //        ValidAudience = settings.Audience,
-                //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(settings.SigningKey!))
-                //    };
-                //});
         }
     }
 }

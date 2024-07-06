@@ -34,12 +34,17 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link @(Context.Request.Path == "/tenants" ? "active" : "")" href="@Url.Action("Index", "Tenants")">
-                            <i class="ni ni-single-02 text-yellow"></i> Tenants
+                            <i class="ni ni-single-02 text-yellow"></i> Existing Tenants
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link @(Context.Request.Path == "/registration" ? "active" : "")" href="@Url.Action("Index", "Registration")">
+                            <i class="ni ni-single-02 text-yellow"></i> New Registrations
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link @(Context.Request.Path == "/unapproved-device-auth" ? "active" : "")" href="@Url.Action("Index", "DeviceAuth")">
-                            <i class="ni ni-single-02 text-yellow"></i> Unapproved Device Auth
+                            <i class="ni ni-spaceship text-yellow"></i> Unapproved Device Auth
                         </a>
                     </li>
                     <li class="nav-item">
