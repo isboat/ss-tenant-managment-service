@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Tenancy.Management.Services.Interfaces;
 using Tenancy.Management.Web.Models;
 
 namespace Tenancy.Management.Web.Controllers
 {
+    [Authorize]
     public class RegistrationController : Controller
     {
         private readonly IRegistrationService _registrationService;
@@ -21,31 +24,34 @@ namespace Tenancy.Management.Web.Controllers
             return View(list);
         }
 
-        // GET: RegisterationController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(string id)
         {
-            return View();
-        }
-
-        // GET: RegisterationController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: RegisterationController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
+            if(string.IsNullOrEmpty(id))
             {
                 return RedirectToAction(nameof(Index));
             }
-            catch
+
+            var model = await _registrationService.GetTenantAsync(id);
+            if(model == null) return RedirectToAction(nameof(Index));
+
+            return View(model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id))
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
+
+            var model = await _registrationService.GetTenantAsync(id);
+            if (model != null)
+            {
+                await _registrationService.RemoveAsync(id);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }
