@@ -82,7 +82,7 @@ namespace Tenancy.Management.Web.Controllers
             builder.Append($"<p>Dear {model.Name},</p>");
             builder.Append($"<p>Welcome to onScreenSync TV Screen Management service! Welcome onboard as a content editor</p>");
             builder.Append("<ul>");
-            builder.Append($"<li>Take some time to navigate through our platform and discover all the tools and features we offer to help you. Visit <a href='http://myscreensyncservice.runasp.net/'>Management Dashboard</a> to get started</li>");
+            builder.Append($"<li>Take some time to navigate through our platform and discover all the tools and features we offer to help you. Visit <a href='https://dashboard.onscreensync.com'>Management Dashboard</a> to get started</li>");
             builder.Append("</ul>");
             builder.Append("<p>If you have any questions or need assistance, don't hesitate to reach out to our support team at support@onscreensync.com or visit our Help Center for <a href='https://onscreensync.com/faq.html'>FAQs and troubleshooting guides</a>.</p>");
             builder.Append("<p>Best regards,<br />onScreenSync.com<p/>");
