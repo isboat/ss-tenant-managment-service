@@ -43,9 +43,9 @@ namespace Tenancy.Management.Mongo
             db.CreateCollection("TenantInfo");
         }
 
-        public Task<IEnumerable<RegisterModel>> GetByFilterAsync(Expression<Func<RegisterModel, bool>> filter)
+        public IEnumerable<RegisterModel> GetByFilter(Func<RegisterModel, bool> filter)
         {
-            throw new NotImplementedException();
+            return _collection.AsQueryable().Where(filter);
         }
     }
 }

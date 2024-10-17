@@ -23,6 +23,11 @@ namespace Tenancy.Management.Services
             return await _repository.GetAsync(id);
         }
 
+        public async Task<IEnumerable<TenantModel>> GetByFilter(Func<TenantModel, bool> filter)
+        {
+            return _repository.GetByFilter(filter);
+        }
+
         public async Task CreateAsync(TenantModel newModel)
         {
             if (newModel != null)

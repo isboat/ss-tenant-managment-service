@@ -27,13 +27,9 @@ namespace Tenancy.Management.Mongo
             return await _collection.Find(_ => true).ToListAsync();
         }
 
-        public async Task<IEnumerable<DeviceAuthModel>> GetByFilterAsync(Expression<Func<DeviceAuthModel, bool>> filter)
+        public IEnumerable<DeviceAuthModel> GetByFilter(Func<DeviceAuthModel, bool> filter)
         {
-            return await _collection.Find(x => 
-                x.TenantId == null                
-                && x.ApprovedDatetime == null
-                && x.RegisteredDatetime < DateTime.UtcNow.AddDays(-1))
-            .ToListAsync();
+            return _collection.AsQueryable().Where(filter);
         }
 
         public async Task<DeviceAuthModel?> GetAsync(string id)

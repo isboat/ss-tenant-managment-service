@@ -20,9 +20,9 @@ namespace Tenancy.Management.Web.Controllers
         }
 
         // GET: TenantController
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            var list = await _baseService.GetByFilterAsync((x) => FilterAsync(x));
+            var list = _baseService.GetByFilter(FilterAsync);
 
             return View(list);
         }
@@ -32,7 +32,7 @@ namespace Tenancy.Management.Web.Controllers
         {
             try
             {
-                var list = await _baseService.GetByFilterAsync((x) => FilterAsync(x));
+                var list = _baseService.GetByFilter(FilterAsync);
                 foreach (var item in list)
                 {
                     await _baseService.RemoveAsync(item.Id!);
@@ -53,7 +53,7 @@ namespace Tenancy.Management.Web.Controllers
             return IsExpired(model);
         }
 
-        private bool IsExpired(DeviceAuthModel model)
+        private static bool IsExpired(DeviceAuthModel model)
         {
             if (model?.RegisteredDatetime == null || model?.ExpiresIn == null) return true;
 
@@ -61,7 +61,7 @@ namespace Tenancy.Management.Web.Controllers
             return expirationDatetime < DateTime.UtcNow;
         }
 
-        private bool IsApproved(DeviceAuthModel model)
+        private static bool IsApproved(DeviceAuthModel model)
         {
             return model?.ApprovedDatetime != null
                 && model.ApprovedDatetime > DateTime.UnixEpoch

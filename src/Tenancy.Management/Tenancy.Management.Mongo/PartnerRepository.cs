@@ -38,17 +38,12 @@ namespace Tenancy.Management.Mongo
         public async Task RemoveAsync(string id) =>
             await _collection.DeleteOneAsync(x => x.Id == id);
 
-        public async Task<IEnumerable<PartnerModel>> GetByFilterAsync(Expression<Func<PartnerModel, bool>> filter)
+        public IEnumerable<PartnerModel> GetByFilter(Func<PartnerModel, bool> filter)
         {
-            var first = await _collection.AsQueryable().FirstOrDefaultAsync(filter);
-            return new[] { first };
-        }
-        public async Task<IEnumerable<PartnerModel>> GetByFilter(Func<PartnerModel, bool> filter)
-        {
-            var first = _collection.AsQueryable().FirstOrDefault(filter);
-            if (first == null) return Enumerable.Empty<PartnerModel>();
+            var filtered = _collection.AsQueryable().Where(filter);
+            if (filtered == null) return Enumerable.Empty<PartnerModel>();
 
-            return new List<PartnerModel> { first };
+            return filtered;
         }
     }
 }

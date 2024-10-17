@@ -44,9 +44,9 @@ namespace Tenancy.Management.Mongo
         public async Task RemoveAsync(string id) =>
             await _collection.DeleteOneAsync(x => x.Id == id);
 
-        public Task<IEnumerable<UserModel>> GetByFilterAsync(Expression<Func<UserModel, bool>> filter)
+        public IEnumerable<UserModel> GetByFilter(Func<UserModel, bool> filter)
         {
-            throw new NotImplementedException();
+            return _collection.AsQueryable().Where(filter);
         }
     }
 }

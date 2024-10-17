@@ -13,6 +13,8 @@ namespace Tenancy.Management.Services.Interfaces
 
         Task<TenantModel> GetTenantAsync(string id);
 
+        Task<IEnumerable<TenantModel>> GetByFilter(Func<TenantModel, bool> filter);
+
         public Task CreateAsync(TenantModel newModel);
 
         public Task UpdateAsync(string id, TenantModel updatedModel);

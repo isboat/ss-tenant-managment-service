@@ -7,7 +7,7 @@ namespace Tenancy.Management.Services.Interfaces
     {
         Task<IEnumerable<T>> GetAllAsync();
 
-        Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<T, bool>> filter);
+        IEnumerable<T> GetByFilter(Func<T, bool> filter);
 
         Task<T?> GetAsync(string id);
 

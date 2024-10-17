@@ -12,7 +12,7 @@ namespace Tenancy.Management.Mongo.Interfaces
     {
         public Task<List<T>> GetAsync();
 
-        public Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<T, bool>> filter);
+        public IEnumerable<T> GetByFilter(Func<T, bool> filter);
 
         public Task<T?> GetAsync(string id);
 

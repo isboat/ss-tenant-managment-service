@@ -19,9 +19,9 @@ namespace Tenancy.Management.Services
             return await _repository.GetAsync();
         }
 
-        public async Task<IEnumerable<T>> GetByFilterAsync(Expression<Func<T, bool>> filter)
+        public IEnumerable<T> GetByFilter(Func<T, bool> filter)
         {
-            return await _repository.GetByFilterAsync(filter);
+            return _repository.GetByFilter(filter);
         }
 
         public async Task<T?> GetAsync(string id)
@@ -39,7 +39,7 @@ namespace Tenancy.Management.Services
             await _repository.RemoveAsync(id);
         }
 
-        public async Task CreateAsync(T model)
+        public virtual async Task CreateAsync(T model)
         {
             await _repository.CreateAsync(model);
         }

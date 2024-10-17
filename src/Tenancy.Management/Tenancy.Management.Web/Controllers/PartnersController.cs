@@ -60,6 +60,17 @@ namespace Tenancy.Management.Web.Controllers
             return View(model);
         }
 
+        [HttpGet("/Partners/{id}/tenants")]
+        public async Task<ActionResult> Tenants(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return View(nameof(Index));
+
+            var model = await _tenantService.GetByFilter(x => x.PartnerId == id);
+            if (model == null) return View(nameof(Index));
+
+            return View(model);
+        }
+
         // GET: TenantController/Create
         public ActionResult Create()
         {
