@@ -13,6 +13,8 @@ namespace Tenancy.Management.Services.Interfaces
 
         public Task UpdateAsync(string id, T updatedModel);
 
+        public Task CreateAsync(T updatedModel);
+
         public Task RemoveAsync(string id);
     }
 }

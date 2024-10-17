@@ -1,20 +1,13 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tenancy.Management.Models
+﻿namespace Tenancy.Management.Models
 {
-    public class TenantModel
+    public class PartnerModel
     {
         public string? Id { get; set; }
 
-        public string? PartnerId { get; set; }
-
         public string? Name { get; set; }
+
+
+        public string? Password { get; set; }
 
         public string? Email { get; set; }
 
@@ -29,10 +22,6 @@ namespace Tenancy.Management.Models
         public string? Postcode { get; set; }
 
         public string? Note { get; set; }
-
-        public int TvAppsLimit { get; set; } = 3;
-
-        public int UsersLimit { get; set; } = 5;
 
         public DateTime Created { get; set; }
     }

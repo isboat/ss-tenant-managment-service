@@ -11,21 +11,25 @@ using Tenancy.Management.Web.Models;
 namespace Tenancy.Management.Web.Controllers
 {
     [Authorize]
-    public class TenantsController : Controller
+    public class PartnersController : Controller
     {
         private readonly ITenantService _tenantService;
         private readonly IUserService _userService;
+        private readonly IEncryptionService _encryptionService;
         private readonly ITenantModelService<AssetModel> _assetService;
         private readonly ITenantModelService<MenuModel> _menuService;
         private readonly ITenantModelService<TextAssetItemModel> _textAssetService;
+        private readonly IService<PartnerModel> _partnerService;
         private readonly IEmailSender _emailSender;
 
-        public TenantsController(
+        public PartnersController(
             ITenantService tenantService,
             IUserService userService,
             ITenantModelService<AssetModel> assetService,
             ITenantModelService<MenuModel> menuService,
             ITenantModelService<TextAssetItemModel> textAssetService,
+            IService<PartnerModel> partnerService,
+            IEncryptionService encryptionService,
             IEmailSender emailSender)
         {
             _tenantService = tenantService;
@@ -34,43 +38,24 @@ namespace Tenancy.Management.Web.Controllers
             _menuService = menuService;
             _textAssetService = textAssetService;
             _emailSender = emailSender;
+            _partnerService = partnerService;
+            _encryptionService = encryptionService;
         }
 
-        // GET: TenantController
+        // GET: PartnersController
         public async Task<ActionResult> Index()
         {
-            var model = new TenantListViewModel {  Tenants = new List<TenantViewModel>()};
-            var list = await _tenantService.GetTenantsAsync();
-            foreach (var tenant in list)
-            {
-                var users = await _userService.GetUsersAsync(tenant.Id!);
-                var viewModel = new TenantViewModel
-                {
-                    Tenant = tenant,
-                    Users = users
-                };
+            var partners = await _partnerService.GetAllAsync();
 
-                model.Tenants.Add(viewModel);
-
-            }
-
-            return View(model);
+            return View(partners);
         }
 
         public async Task<ActionResult> Details(string id)
         {
-            var tenant = await _tenantService.GetTenantAsync(id);
-            var users = await _userService.GetUsersAsync(tenant.Id!);
-            var assets = await _assetService.GetAllAsync(tenant.Id!);
-            var menus = await _menuService.GetAllAsync(tenant.Id!);
-            var textAds = await _textAssetService.GetAllAsync(tenant.Id!);
+            if (string.IsNullOrEmpty(id)) return View(nameof(Index));
 
-            var model = new TenantViewModel();
-            if (tenant != null) model.Tenant = tenant;
-            if (users != null) model.Users = users;
-            if (assets != null) model.Assets = assets;
-            if (assets != null) model.Menus = menus;
-            if (textAds != null) model.TextAssets = textAds;
+            var model = await _partnerService.GetAsync(id);
+            if(model == null) return View(nameof(Index));
 
             return View(model);
         }
@@ -84,18 +69,19 @@ namespace Tenancy.Management.Web.Controllers
         // POST: TenantController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([FromForm]TenantModel model)
+        public async Task<ActionResult> Create([FromForm]PartnerModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    //model.Id = Guid.NewGuid().ToString("N"); This is handled in the tenant service using the tenant name
+                    model.Id = Guid.NewGuid().ToString("N");
                     model.Created = DateTime.Now;
+                    model.Password = _encryptionService.Encrypt("Temporary!")?.Hashed;
 
-                    await _tenantService.CreateAsync(model);
+                    await _partnerService.CreateAsync(model);
 
-                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync platform created", EmailTemplates.GetTenantCreatedEmailBody(model));
+                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync partnership platform created", EmailTemplates.GetPartnerCreatedEmailBody(model));
                     await _emailSender.SendEmailAsync(model.Email!, "General Data Protection Regulation (UK GDPR)", EmailTemplates.GetTenantGdprEmailBody(model.Name));
                 }
 
@@ -110,20 +96,20 @@ namespace Tenancy.Management.Web.Controllers
         // GET: TenantController/Edit/5
         public async Task<ActionResult> Edit(string id)
         {
-            var model = await _tenantService.GetTenantAsync(id);
+            var model = await _partnerService.GetAsync(id);
             return View(model);
         }
 
         // POST: TenantController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string id, [FromForm] TenantModel model)
+        public async Task<ActionResult> Edit(string id, [FromForm] PartnerModel model)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    await _tenantService.UpdateAsync(id, model);
+                    await _partnerService.UpdateAsync(id, model);
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -133,12 +119,13 @@ namespace Tenancy.Management.Web.Controllers
             }
         }
 
-        [HttpGet("/Tenants/Delete/{id}")]
+        [HttpGet("/Partners/Delete/{id}")]
         public async Task<ActionResult> Delete(string id)
         {
             try
             {
-                //await _tenantService.RemoveAsync(id);
+                await _partnerService.RemoveAsync(id);
+
                 return RedirectToAction(nameof(Index));
             }
             catch

@@ -70,7 +70,10 @@ namespace Tenancy.Management.Web
             builder.Services.AddSingleton<ITenantService, TenantService>();
             builder.Services.AddSingleton<IUserService, UserService>();
             builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+            builder.Services.AddSingleton<IEncryptionService, EncryptionService>();
             builder.Services.AddSingleton<IRegistrationService, RegistrationService>();
+            builder.Services.AddSingleton<IService<PartnerModel>, BaseService<PartnerModel>>();
 
 
             builder.Services.AddSingleton<ITenantRepository<AssetModel>>(provider =>
@@ -104,6 +107,7 @@ namespace Tenancy.Management.Web
             });
 
             builder.Services.AddSingleton<IRepository<DeviceAuthModel>, DeviceRepository>();
+            builder.Services.AddSingleton<IRepository<PartnerModel>, PartnerRepository>();
             builder.Services.AddSingleton<IService<DeviceAuthModel>, BaseService<DeviceAuthModel>>();
             builder.Services.AddSingleton<ITenantModelService<AssetModel>, TenantModelService<AssetModel>>();
             builder.Services.AddSingleton<ITenantModelService<TextAssetItemModel>, TenantModelService<TextAssetItemModel>>();

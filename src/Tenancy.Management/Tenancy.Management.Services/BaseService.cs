@@ -38,5 +38,10 @@ namespace Tenancy.Management.Services
         {
             await _repository.RemoveAsync(id);
         }
+
+        public async Task CreateAsync(T model)
+        {
+            await _repository.CreateAsync(model);
+        }
     }
 }
