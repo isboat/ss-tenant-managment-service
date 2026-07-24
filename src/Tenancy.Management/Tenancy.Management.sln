@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenancy.Management.Services
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenancy.Management.Mongo", "Tenancy.Management.Mongo\Tenancy.Management.Mongo.csproj", "{B7340BC8-0690-4F7A-B249-1C90DF6367E4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tenancy.Management.Services.Tests", "Tenancy.Management.Services.Tests\Tenancy.Management.Services.Tests.csproj", "{0E2B40EF-7C0B-4C60-96B2-28578543A9E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{B7340BC8-0690-4F7A-B249-1C90DF6367E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B7340BC8-0690-4F7A-B249-1C90DF6367E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B7340BC8-0690-4F7A-B249-1C90DF6367E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E2B40EF-7C0B-4C60-96B2-28578543A9E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E2B40EF-7C0B-4C60-96B2-28578543A9E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E2B40EF-7C0B-4C60-96B2-28578543A9E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E2B40EF-7C0B-4C60-96B2-28578543A9E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

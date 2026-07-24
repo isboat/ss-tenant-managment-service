@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Azure.SignalR.Management;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Tenancy.Management.Models;
 using Tenancy.Management.Models.Signalr;
 using Tenancy.Management.Mongo;
@@ -128,6 +125,9 @@ namespace Tenancy.Management.Web
                 {
                     options.LoginPath = "/Home/Login";
                     options.Cookie.Name = "onScreenSync.Tenancy.AspNetCore.Cookies";
+                    options.Cookie.HttpOnly = true;
+                    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+                    options.Cookie.SameSite = SameSiteMode.Lax;
                     options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
                     options.SlidingExpiration = true;
 

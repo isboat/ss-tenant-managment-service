@@ -19,6 +19,7 @@ namespace Tenancy.Management.Web.Controllers
         private readonly ITenantModelService<MenuModel> _menuService;
         private readonly ITenantModelService<TextAssetItemModel> _textAssetService;
         private readonly IEmailSender _emailSender;
+        private readonly ILogger<TenantsController> _logger;
 
         public TenantsController(
             ITenantService tenantService,
@@ -26,7 +27,8 @@ namespace Tenancy.Management.Web.Controllers
             ITenantModelService<AssetModel> assetService,
             ITenantModelService<MenuModel> menuService,
             ITenantModelService<TextAssetItemModel> textAssetService,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ILogger<TenantsController> logger)
         {
             _tenantService = tenantService;
             _userService = userService;
@@ -34,6 +36,7 @@ namespace Tenancy.Management.Web.Controllers
             _menuService = menuService;
             _textAssetService = textAssetService;
             _emailSender = emailSender;
+            _logger = logger;
         }
 
         // GET: TenantController
@@ -101,8 +104,9 @@ namespace Tenancy.Management.Web.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to create tenant");
                 return View();
             }
         }
@@ -127,13 +131,15 @@ namespace Tenancy.Management.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to update tenant {TenantId}", id);
                 return View();
             }
         }
 
-        [HttpGet("/Tenants/Delete/{id}")]
+        [HttpPost("/Tenants/Delete/{id}")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string id)
         {
             try
@@ -141,8 +147,9 @@ namespace Tenancy.Management.Web.Controllers
                 //await _tenantService.RemoveAsync(id);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to delete tenant {TenantId}", id);
                 return RedirectToAction(nameof(Index));
             }
         }

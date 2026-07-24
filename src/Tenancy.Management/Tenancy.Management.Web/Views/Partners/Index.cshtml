@@ -51,7 +51,10 @@
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id=item.Id  }) |
                     @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    <form method="post" action="@Url.Action("Delete", "Partners", new { id = item.Id })" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-link p-0">Delete</button>
+                    </form>
             </td>
         </tr>
 }
