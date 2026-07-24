@@ -50,7 +50,7 @@ namespace Tenancy.Management.Services
             return model!;
         }
 
-        public async Task CreateAsync(UserModel newModel)
+        public async Task<string> CreateAsync(UserModel newModel)
         {
             EnsureIdNotNull(newModel);
             var inviteToken = _encryptionService.GenerateToken();
@@ -60,6 +60,7 @@ namespace Tenancy.Management.Services
             newModel.InviteTokenConsumedOn = null;
 
             await _repository.CreateAsync(newModel);
+            return inviteToken;
         }
 
         public async Task UpdateAsync(string id, UserModel updatedModel)
@@ -67,8 +68,11 @@ namespace Tenancy.Management.Services
             if (updatedModel == null) return;
 
             EnsureIdNotNull(updatedModel);
-            var existingModel = await _repository.GetByTenantAsync(updatedModel.TenantId!, id)
-                ?? await _repository.GetAsync(id);
+            var existingModel = await _repository.GetByTenantAsync(updatedModel.TenantId!, id);
+            if (existingModel == null)
+            {
+                throw new KeyNotFoundException($"User '{id}' was not found for tenant '{updatedModel.TenantId}'.");
+            }
 
             updatedModel.Password = string.IsNullOrWhiteSpace(updatedModel.Password)
                 ? existingModel?.Password

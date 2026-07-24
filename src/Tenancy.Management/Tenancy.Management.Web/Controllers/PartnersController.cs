@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Text;
 using Tenancy.Management.Models;
 using Tenancy.Management.Services;
 using Tenancy.Management.Services.Interfaces;
@@ -102,7 +101,7 @@ namespace Tenancy.Management.Web.Controllers
 
                     await _partnerService.CreateAsync(model);
 
-                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync partnership platform created", EmailTemplates.GetPartnerCreatedEmailBody(model));
+                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync partnership platform created", EmailTemplates.GetPartnerInviteEmailBody(model, inviteToken));
                     await _emailSender.SendEmailAsync(model.Email!, "General Data Protection Regulation (UK GDPR)", EmailTemplates.GetTenantGdprEmailBody(model.Name));
                 }
 

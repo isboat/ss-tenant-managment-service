@@ -38,6 +38,28 @@ namespace Tenancy.Management.Services
             return builder.ToString();
         }
 
+        public static string GetPartnerInviteEmailBody(PartnerModel model, string inviteToken)
+        {
+            var builder = new StringBuilder(GetPartnerCreatedEmailBody(model));
+            builder.Append("<h2>Activate your partner account</h2>");
+            builder.Append("<p>Use the one-time invite token below to complete account setup. This token expires after the configured invite window.</p>");
+            builder.Append($"<p><strong>Invite token:</strong> {inviteToken}</p>");
+            return builder.ToString();
+        }
+
+        public static string GetUserInviteEmailBody(UserModel model, string inviteToken)
+        {
+            var builder = new StringBuilder();
+            builder.Append($"<p>Dear {model.Name},</p>");
+            builder.Append("<p>Welcome to onScreenSync TV Screen Management service! Welcome onboard as a content editor.</p>");
+            builder.Append("<p>Use the one-time invite token below to complete account setup. This token expires after the configured invite window.</p>");
+            builder.Append($"<p><strong>Invite token:</strong> {inviteToken}</p>");
+            builder.Append("<p>Visit <a href='https://dashboard.onscreensync.com'>Management Dashboard</a> to get started.</p>");
+            builder.Append("<p>If you have any questions or need assistance, contact support@onscreensync.com or visit <a href='https://onscreensync.com/faq.html'>FAQs and troubleshooting guides</a>.</p>");
+            builder.Append("<p>Best regards,<br />onScreenSync.com<p/>");
+            return builder.ToString();
+        }
+
         public static string GetTenantGdprEmailBody(string name)
         {
             var builder = new StringBuilder();

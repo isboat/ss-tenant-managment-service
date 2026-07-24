@@ -11,7 +11,7 @@ namespace Tenancy.Management.Services.Interfaces
 
         Task<UserModel> GetByEmailAsync(string email);
 
-        public Task CreateAsync(UserModel newModel);
+        public Task<string> CreateAsync(UserModel newModel);
 
         public Task UpdateAsync(string id, UserModel updatedModel);
 
