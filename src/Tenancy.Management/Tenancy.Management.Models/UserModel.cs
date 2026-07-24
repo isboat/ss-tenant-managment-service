@@ -14,6 +14,12 @@ namespace Tenancy.Management.Models
 
         public string? Password { get; set; }
 
+        public string? InviteTokenHash { get; set; }
+
+        public DateTime? InviteTokenExpiresOn { get; set; }
+
+        public DateTime? InviteTokenConsumedOn { get; set; }
+
         public UserRoles? Role { get; set; }
 
         public DateTime? CreatedOn { get; set; }

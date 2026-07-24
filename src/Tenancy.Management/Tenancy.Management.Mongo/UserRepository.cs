@@ -30,6 +30,9 @@ namespace Tenancy.Management.Mongo
         public async Task<UserModel?> GetAsync(string id) =>
             await _collection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
+        public async Task<UserModel?> GetByTenantAsync(string tenantId, string id) =>
+            await _collection.Find(x => x.TenantId == tenantId && x.Id == id).FirstOrDefaultAsync();
+
         public async Task<UserModel?> GetByEmailAsync(string email)
         {
             return await _collection.Find(x => x.Email == email).FirstOrDefaultAsync();
@@ -43,6 +46,9 @@ namespace Tenancy.Management.Mongo
 
         public async Task RemoveAsync(string id) =>
             await _collection.DeleteOneAsync(x => x.Id == id);
+
+        public async Task RemoveAsync(string tenantId, string id) =>
+            await _collection.DeleteOneAsync(x => x.TenantId == tenantId && x.Id == id);
 
         public IEnumerable<UserModel> GetByFilter(Func<UserModel, bool> filter)
         {
