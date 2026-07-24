@@ -7,6 +7,7 @@ namespace Tenancy.Management.Services.Interfaces
         Task<IEnumerable<UserModel>> GetUsersAsync(string tenantId);
 
         Task<UserModel> GetAsync(string id);
+        Task<UserModel?> GetAsync(string tenantId, string id);
 
         Task<UserModel> GetByEmailAsync(string email);
 
@@ -15,5 +16,6 @@ namespace Tenancy.Management.Services.Interfaces
         public Task UpdateAsync(string id, UserModel updatedModel);
 
         public Task RemoveAsync(string id);
+        public Task RemoveAsync(string tenantId, string id);
     }
 }
