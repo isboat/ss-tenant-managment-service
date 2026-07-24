@@ -8,12 +8,14 @@ namespace Tenancy.Management.Services
     public class UserService : IUserService
     {
         private IUserRepository _repository;
+        private readonly IEncryptionService _encryptionService;
+        private readonly AuthSettings _authSettings;
 
-        private readonly string _hashingSupport = "FA39DB22-672D-4B38-B96D-9905D6807447";
-
-        public UserService(IUserRepository repository)
+        public UserService(IUserRepository repository, IEncryptionService encryptionService, IOptions<AuthSettings> authSettings)
         {
             _repository = repository;
+            _encryptionService = encryptionService;
+            _authSettings = authSettings.Value;
         }
 
         public async Task<IEnumerable<UserModel>> GetUsersAsync(string tenantId)
@@ -32,6 +34,14 @@ namespace Tenancy.Management.Services
             return model!;
         }
 
+        public async Task<UserModel?> GetAsync(string tenantId, string id)
+        {
+            var model = await _repository.GetByTenantAsync(tenantId, id);
+            if (model != null) model.Password = null;
+
+            return model;
+        }
+
         public async Task<UserModel> GetByEmailAsync(string email)
         {
             var model = await _repository.GetByEmailAsync(email);
@@ -40,12 +50,17 @@ namespace Tenancy.Management.Services
             return model!;
         }
 
-        public async Task CreateAsync(UserModel newModel)
+        public async Task<string> CreateAsync(UserModel newModel)
         {
             EnsureIdNotNull(newModel);
-            newModel.Password = Encrypt("Temporary!")?.Hashed;
+            var inviteToken = _encryptionService.GenerateToken();
+            newModel.Password = null;
+            newModel.InviteTokenHash = _encryptionService.HashToken(inviteToken);
+            newModel.InviteTokenExpiresOn = DateTime.UtcNow.AddHours(_authSettings.InviteTokenExpiryHours);
+            newModel.InviteTokenConsumedOn = null;
 
             await _repository.CreateAsync(newModel);
+            return inviteToken;
         }
 
         public async Task UpdateAsync(string id, UserModel updatedModel)
@@ -53,7 +68,15 @@ namespace Tenancy.Management.Services
             if (updatedModel == null) return;
 
             EnsureIdNotNull(updatedModel);
-            updatedModel.Password = Encrypt(updatedModel.Password!)?.Hashed;
+            var existingModel = await _repository.GetByTenantAsync(updatedModel.TenantId!, id);
+            if (existingModel == null)
+            {
+                throw new KeyNotFoundException($"User '{id}' was not found for tenant '{updatedModel.TenantId}'.");
+            }
+
+            updatedModel.Password = string.IsNullOrWhiteSpace(updatedModel.Password)
+                ? existingModel?.Password
+                : _encryptionService.Encrypt(updatedModel.Password)?.Hashed;
             await _repository.UpdateAsync(id, updatedModel);
         }
 
@@ -62,6 +85,10 @@ namespace Tenancy.Management.Services
             await _repository.RemoveAsync(id);
         }
 
+        public async Task RemoveAsync(string tenantId, string id)
+        {
+            await _repository.RemoveAsync(tenantId, id);
+        }
 
         private static void EnsureIdNotNull(UserModel newModel)
         {
@@ -76,21 +103,5 @@ namespace Tenancy.Management.Services
             }
         }
 
-        private EncryptedResult? Encrypt(string input)
-        {
-            var salt = BCrypt.Net.BCrypt.GenerateSalt();
-
-            // Generate a salt and hash the password
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(input + _hashingSupport, salt);
-
-            // Store the hashed password in the database
-            return new EncryptedResult { Hashed = hashedPassword, UsedSalt = salt };
-        }
-
-        private bool Verify(string input, string storedHash)
-        {
-            // Verify the entered password against the stored hash
-            return BCrypt.Net.BCrypt.Verify(input + _hashingSupport, storedHash);
-        }
     }
 }

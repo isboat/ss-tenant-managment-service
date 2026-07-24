@@ -6,5 +6,7 @@ namespace Tenancy.Management.Services.Interfaces
     {
         EncryptedResult? Encrypt(string input);
         bool Verify(string input, string storedHash);
+        string GenerateToken(int byteLength = 32);
+        string HashToken(string token);
     }
 }

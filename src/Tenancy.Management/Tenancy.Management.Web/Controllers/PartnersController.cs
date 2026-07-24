@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Text;
 using Tenancy.Management.Models;
 using Tenancy.Management.Services;
 using Tenancy.Management.Services.Interfaces;
@@ -21,6 +20,8 @@ namespace Tenancy.Management.Web.Controllers
         private readonly ITenantModelService<TextAssetItemModel> _textAssetService;
         private readonly IService<PartnerModel> _partnerService;
         private readonly IEmailSender _emailSender;
+        private readonly AuthSettings _authSettings;
+        private readonly ILogger<PartnersController> _logger;
 
         public PartnersController(
             ITenantService tenantService,
@@ -30,7 +31,9 @@ namespace Tenancy.Management.Web.Controllers
             ITenantModelService<TextAssetItemModel> textAssetService,
             IService<PartnerModel> partnerService,
             IEncryptionService encryptionService,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            Microsoft.Extensions.Options.IOptions<AuthSettings> authSettings,
+            ILogger<PartnersController> logger)
         {
             _tenantService = tenantService;
             _userService = userService;
@@ -40,6 +43,8 @@ namespace Tenancy.Management.Web.Controllers
             _emailSender = emailSender;
             _partnerService = partnerService;
             _encryptionService = encryptionService;
+            _authSettings = authSettings.Value;
+            _logger = logger;
         }
 
         // GET: PartnersController
@@ -88,18 +93,23 @@ namespace Tenancy.Management.Web.Controllers
                 {
                     model.Id = Guid.NewGuid().ToString("N");
                     model.Created = DateTime.Now;
-                    model.Password = _encryptionService.Encrypt("Temporary!")?.Hashed;
+                    var inviteToken = _encryptionService.GenerateToken();
+                    model.Password = null;
+                    model.InviteTokenHash = _encryptionService.HashToken(inviteToken);
+                    model.InviteTokenExpiresOn = DateTime.UtcNow.AddHours(_authSettings.InviteTokenExpiryHours);
+                    model.InviteTokenConsumedOn = null;
 
                     await _partnerService.CreateAsync(model);
 
-                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync partnership platform created", EmailTemplates.GetPartnerCreatedEmailBody(model));
+                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync partnership platform created", EmailTemplates.GetPartnerInviteEmailBody(model, inviteToken));
                     await _emailSender.SendEmailAsync(model.Email!, "General Data Protection Regulation (UK GDPR)", EmailTemplates.GetTenantGdprEmailBody(model.Name));
                 }
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to create partner");
                 return View();
             }
         }
@@ -124,13 +134,15 @@ namespace Tenancy.Management.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to update partner {PartnerId}", id);
                 return View();
             }
         }
 
-        [HttpGet("/Partners/Delete/{id}")]
+        [HttpPost("/Partners/Delete/{id}")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string id)
         {
             try
@@ -139,8 +151,9 @@ namespace Tenancy.Management.Web.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to delete partner {PartnerId}", id);
                 return RedirectToAction(nameof(Index));
             }
         }
