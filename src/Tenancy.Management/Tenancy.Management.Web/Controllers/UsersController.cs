@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using Tenancy.Management.Models;
 using Tenancy.Management.Services.Interfaces;
+using Tenancy.Management.Services;
 using Tenancy.Management.Web.Models;
 
 namespace Tenancy.Management.Web.Controllers
@@ -67,7 +68,7 @@ namespace Tenancy.Management.Web.Controllers
                     }
 
                     var inviteToken = await _userService.CreateAsync(model);
-                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync user created", EmailTemplates.GetUserInviteEmailBody(model, inviteToken));
+                    await _emailSender.SendEmailAsync(model.Email!, "onScreenSync user created",  EmailTemplates.GetUserInviteEmailBody(model, inviteToken));
                 }
 
                 return RedirectToAction(nameof(Index), new { tenantId = tenantId});
