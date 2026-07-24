@@ -36,9 +36,10 @@ namespace Tenancy.Management.Web.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(string username, string password, string ReturnUrl)
         {
-            if ((username == "admin") && (password == _authSettings.Passwd))
+            if ((username == _authSettings.Username) && (password == _authSettings.Passwd))
             {
                 var claims = new List<Claim>
                 {
@@ -47,7 +48,12 @@ namespace Tenancy.Management.Web.Controllers
                 var claimsIdentity = new ClaimsIdentity(claims, "Login");
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                return Redirect(ReturnUrl == null ? "/Index" : ReturnUrl);
+                if (!string.IsNullOrWhiteSpace(ReturnUrl) && Url.IsLocalUrl(ReturnUrl))
+                {
+                    return Redirect(ReturnUrl);
+                }
+
+                return RedirectToAction("Index", "Home");
             }
             else
                 return View();

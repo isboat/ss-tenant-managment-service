@@ -1,5 +1,6 @@
 ﻿<h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
 <form method="post">
+    @Html.AntiForgeryToken()
     <label class="sr-only">Username</label>
     <input type="text" name="username" class="form-control" placeholder="Username">
     <label class="sr-only">Password</label>

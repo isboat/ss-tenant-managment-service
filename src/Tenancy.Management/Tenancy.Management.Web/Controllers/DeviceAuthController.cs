@@ -13,10 +13,12 @@ namespace Tenancy.Management.Web.Controllers
     public class DeviceAuthController : Controller
     {
         private readonly IService<DeviceAuthModel> _baseService;
+        private readonly ILogger<DeviceAuthController> _logger;
 
-        public DeviceAuthController(IService<DeviceAuthModel> baseService)
+        public DeviceAuthController(IService<DeviceAuthModel> baseService, ILogger<DeviceAuthController> logger)
         {
             _baseService = baseService;
+            _logger = logger;
         }
 
         // GET: TenantController
@@ -27,7 +29,8 @@ namespace Tenancy.Management.Web.Controllers
             return View(list);
         }
 
-        [HttpGet("/DeviceAuth/Delete")]
+        [HttpPost("/DeviceAuth/Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete()
         {
             try
@@ -40,8 +43,9 @@ namespace Tenancy.Management.Web.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to delete expired device authorization records");
                 return RedirectToAction(nameof(Index));
             }
         }
