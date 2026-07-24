@@ -50,7 +50,13 @@ namespace Tenancy.Management.Services
                 throw new ArgumentNullException(nameof(name));
             }
 
-            var id = name.Replace(" ", "_").ToLowerInvariant();
+            var normalized = new string(name
+                .Trim()
+                .ToLowerInvariant()
+                .Select(c => char.IsLetterOrDigit(c) ? c : '_')
+                .ToArray());
+
+            var id = string.Join("_", normalized.Split('_', StringSplitOptions.RemoveEmptyEntries));
             id += "_tenant";
             return id;
         }

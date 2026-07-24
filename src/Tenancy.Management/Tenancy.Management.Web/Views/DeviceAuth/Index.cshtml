@@ -34,7 +34,10 @@
                 </table>
             </div>
             <div>
-                <a class="dropdown-item" href="@Url.Action("Delete", "DeviceAuth")">Delete All</a>
+                <form method="post" action="@Url.Action("Delete", "DeviceAuth")">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="dropdown-item">Delete All</button>
+                </form>
             </div>
         </div>
     </div>

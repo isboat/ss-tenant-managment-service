@@ -9,6 +9,12 @@
 
         public string? Password { get; set; }
 
+        public string? InviteTokenHash { get; set; }
+
+        public DateTime? InviteTokenExpiresOn { get; set; }
+
+        public DateTime? InviteTokenConsumedOn { get; set; }
+
         public string? Email { get; set; }
 
         public string? City { get; set; }

@@ -14,11 +14,13 @@ namespace Tenancy.Management.Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IEmailSender _emailSender;
+        private readonly ILogger<UsersController> _logger;
 
-        public UsersController(IUserService userService, IEmailSender emailSender)
+        public UsersController(IUserService userService, IEmailSender emailSender, ILogger<UsersController> logger)
         {
             _userService = userService;
             _emailSender = emailSender;
+            _logger = logger;
         }
 
         [HttpGet("{tenantId}/Users")]
@@ -36,7 +38,8 @@ namespace Tenancy.Management.Web.Controllers
         [HttpGet("{tenantId}/Users/Details/{id}")]
         public async Task<ActionResult> Details(string tenantId, string id)
         {
-            var model = await _userService.GetAsync(id);
+            var model = await _userService.GetAsync(tenantId, id);
+            if (model == null) return NotFound();
             return View(model);
         }
 
@@ -70,8 +73,9 @@ namespace Tenancy.Management.Web.Controllers
 
                 return RedirectToAction(nameof(Index), new { tenantId = tenantId});
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to create user for tenant {TenantId}", tenantId);
                 return View();
             }
         }
@@ -92,7 +96,8 @@ namespace Tenancy.Management.Web.Controllers
         [HttpGet("{tenantId}/Users/Edit/{id}")]
         public async Task<ActionResult> Edit(string tenantId, string id)
         {
-            var model = await _userService.GetAsync(id);
+            var model = await _userService.GetAsync(tenantId, id);
+            if (model == null) return NotFound();
             return View(model);
         }
 
@@ -104,26 +109,30 @@ namespace Tenancy.Management.Web.Controllers
             {
                 if (ModelState.IsValid)
                 {
+                    model.TenantId = tenantId;
                     await _userService.UpdateAsync(id, model);
                 }
                 return RedirectToAction(nameof(Index), new { tenantId = tenantId });
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to update user {UserId} for tenant {TenantId}", id, tenantId);
                 return View();
             }
         }
 
-        [HttpGet("{tenantId}/Users/Delete/{id}")]
+        [HttpPost("{tenantId}/Users/Delete/{id}")]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string tenantId, string id)
         {
             try
             {
-                await _userService.RemoveAsync(id);
+                await _userService.RemoveAsync(tenantId, id);
                 return RedirectToAction(nameof(Index), new { tenantId });
             }
-            catch
+            catch (Exception ex)
             {
+                _logger.LogError(ex, "Failed to delete user {UserId} for tenant {TenantId}", id, tenantId);
                 return RedirectToAction(nameof(Index), new { tenantId });
             }
         }
