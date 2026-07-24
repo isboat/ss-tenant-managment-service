@@ -54,7 +54,10 @@
                                         <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">
                                             <a class="dropdown-item" href="@Url.Action("Details", "Users", new { id=item.Id, tenantId=item.TenantId })">View Details</a>
                                             <a class="dropdown-item" href="@Url.Action("Edit", "Users", new { id=item.Id, tenantId=item.TenantId })">Edit</a>
-                                            <a class="dropdown-item" href="@Url.Action("Delete", "Users", new { id=item.Id, tenantId=item.TenantId })">Delete User</a>
+                                            <form method="post" action="@Url.Action("Delete", "Users", new { id=item.Id, tenantId=item.TenantId })">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="dropdown-item">Delete User</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </td>
