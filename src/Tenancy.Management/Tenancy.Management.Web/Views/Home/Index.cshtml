@@ -1,8 +1,30 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="modern-hero">
+    <div class="modern-hero__eyebrow">Tenant Management</div>
+    <h1>Operate partners, tenants, users, and devices from one polished workspace.</h1>
+    <p>
+        A refreshed dashboard experience with cleaner navigation, elevated surfaces, and modern visual hierarchy for everyday administration tasks.
+    </p>
+    <div class="mt-4">
+        <a class="btn btn-lg btn-white mr-2" href="@Url.Action("Index", "Tenants")">View tenants</a>
+        <a class="btn btn-lg btn-outline-light" href="@Url.Action("Index", "Registration")">Review registrations</a>
+    </div>
+</section>
+
+<section class="modern-feature-grid">
+    <article class="modern-feature-card">
+        <h3>Tenant operations</h3>
+        <p>Find and manage tenant records with refreshed cards, tables, and actions.</p>
+    </article>
+    <article class="modern-feature-card">
+        <h3>Partner visibility</h3>
+        <p>Keep partner data easy to scan with stronger spacing and typography.</p>
+    </article>
+    <article class="modern-feature-card">
+        <h3>Device approvals</h3>
+        <p>Review pending device authentication requests from a more focused interface.</p>
+    </article>
+</section>
