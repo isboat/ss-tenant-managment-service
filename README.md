@@ -30,8 +30,9 @@ dotnet run --project src/Tenancy.Management/Tenancy.Management.Web/Tenancy.Manag
 
 ## Health monitoring
 
-`GET /health` returns HTTP 200 when MongoDB, Azure SignalR, and the configured SMTP
-server are all reachable. It returns HTTP 503 when any dependency is unhealthy.
+`GET /health` returns HTTP 200 when MongoDB and Azure SignalR are reachable and the
+configured SMTP server accepts the application's credentials. It returns HTTP 503
+when any dependency is unhealthy.
 The JSON response includes the overall status, total check duration, and the status,
 description, and duration of every dependency check. The endpoint is anonymous so
 that an external dashboard or container orchestrator can call it. Unlike application

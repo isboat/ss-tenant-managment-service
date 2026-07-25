@@ -13,7 +13,10 @@ public sealed class SmtpHealthCheck(IOptions<EmailSettings> options) : IHealthCh
         CancellationToken cancellationToken = default)
     {
         var settings = options.Value;
-        if (string.IsNullOrWhiteSpace(settings.Host) || settings.Port is <= 0 or > 65535)
+        if (string.IsNullOrWhiteSpace(settings.Host) ||
+            settings.Port is <= 0 or > 65535 ||
+            string.IsNullOrWhiteSpace(settings.FromAddress) ||
+            string.IsNullOrWhiteSpace(settings.Passkey))
         {
             return HealthCheckResult.Unhealthy("SMTP configuration is missing or invalid.");
         }
@@ -24,15 +27,19 @@ public sealed class SmtpHealthCheck(IOptions<EmailSettings> options) : IHealthCh
             await client.ConnectAsync(
                 settings.Host,
                 settings.Port,
-                SecureSocketOptions.Auto,
+                SecureSocketOptions.SslOnConnect,
+                cancellationToken);
+            await client.AuthenticateAsync(
+                settings.FromAddress,
+                settings.Passkey,
                 cancellationToken);
             await client.DisconnectAsync(true, cancellationToken);
 
-            return HealthCheckResult.Healthy("The SMTP server accepted a connection.");
+            return HealthCheckResult.Healthy("The SMTP server accepted the configured credentials.");
         }
         catch (Exception exception)
         {
-            return HealthCheckResult.Unhealthy("The SMTP server could not be reached.", exception);
+            return HealthCheckResult.Unhealthy("The SMTP server connection or authentication failed.", exception);
         }
     }
 }
