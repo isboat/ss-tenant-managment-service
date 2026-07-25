@@ -51,7 +51,11 @@ namespace Tenancy.Management.Web
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // Health monitors must receive the actual 200/503 result over the container's
+            // HTTP listener rather than a redirect that can mask dependency failures.
+            app.UseWhen(
+                context => context.Request.Path != "/health",
+                branch => branch.UseHttpsRedirection());
             app.UseStaticFiles();
 
             app.UseRouting();
