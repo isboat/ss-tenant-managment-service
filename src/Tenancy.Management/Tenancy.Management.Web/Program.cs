@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Azure.SignalR.Management;
 using Microsoft.Extensions.Options;
 using Tenancy.Management.Models;
@@ -7,6 +8,7 @@ using Tenancy.Management.Mongo;
 using Tenancy.Management.Mongo.Interfaces;
 using Tenancy.Management.Services;
 using Tenancy.Management.Services.Interfaces;
+using Tenancy.Management.Web.HealthChecks;
 using Tenancy.Management.Web.Services;
 
 namespace Tenancy.Management.Web
@@ -32,6 +34,11 @@ namespace Tenancy.Management.Web
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            builder.Services.AddHealthChecks()
+                .AddCheck<MongoHealthCheck>("mongodb", timeout: TimeSpan.FromSeconds(10))
+                .AddCheck<SignalRHealthCheck>("azure-signalr", timeout: TimeSpan.FromSeconds(10))
+                .AddCheck<SmtpHealthCheck>("smtp", timeout: TimeSpan.FromSeconds(10));
+
             RegisterAuth(builder, builder.Configuration);
 
             var app = builder.Build();
@@ -44,12 +51,21 @@ namespace Tenancy.Management.Web
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            // Health monitors must receive the actual 200/503 result over the container's
+            // HTTP listener rather than a redirect that can mask dependency failures.
+            app.UseWhen(
+                context => context.Request.Path != "/health",
+                branch => branch.UseHttpsRedirection());
             app.UseStaticFiles();
 
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapHealthChecks("/health", new HealthCheckOptions
+            {
+                ResponseWriter = HealthCheckResponseWriter.WriteResponseAsync
+            }).AllowAnonymous();
 
             app.MapControllerRoute(
                 name: "default",
